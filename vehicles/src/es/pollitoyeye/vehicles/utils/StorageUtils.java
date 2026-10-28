@@ -107,7 +107,7 @@ public class StorageUtils {
       Class<?> nbtIo = Class.forName("net.minecraft.nbt.NbtIo");
       Class<?> accounter = Class.forName("net.minecraft.nbt.NbtAccounter");
       Class<?> compound = Class.forName("net.minecraft.nbt.CompoundTag");
-      Object limit = nbtIo.getMethod("unlimitedHeap").invoke(null);
+      Object limit = accounter.getMethod("unlimitedHeap").invoke(null);
       Object tag = nbtIo.getMethod("readCompressed", java.io.InputStream.class, accounter).invoke(null, new ByteArrayInputStream(data), limit);
       if ((Boolean)compound.getMethod("contains", String.class).invoke(tag, "DataVersion")) {
          return data;

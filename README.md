@@ -91,3 +91,9 @@ before deploying; keep the original jar (`plugin_jars_old_20261029/Vehicles(14.4
 * ProtocolLib: "Version (MC: 26.3.0) has not yet been tested" - works.
 * dynmap: `Invalid rotate error - models_1.txt` - model file of the mod renderer, harmless.
 * LunaChat / Multiverse-Core: handled by the parent session.
+
+## Status (verified from the server startup log only, no in-game test)
+
+All five plugins above enable without errors on Paper 26.3-227. In-game behaviour is untested; Vehicles in particular (driving input, trunks, Mecha/Submarine packets) has only been checked for successful initialisation.
+
+The `cp namecolor`-style 'Could not register alias' warnings already existed before this work and are unrelated.

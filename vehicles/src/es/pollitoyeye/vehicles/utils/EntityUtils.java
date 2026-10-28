@@ -152,7 +152,8 @@ public class EntityUtils {
          Class<?> entityTypeClass = Class.forName("net.minecraft.world.entity.EntityType");
          Class<?> levelClass = Class.forName("net.minecraft.world.level.Level");
          armorStandClass = Class.forName("net.minecraft.world.entity.decoration.ArmorStand");
-         armorStandEntityType = entityTypeClass.getField("ARMOR_STAND").get(null);
+         Class<?> entityTypesClass = Class.forName("net.minecraft.world.entity.EntityTypes");
+         armorStandEntityType = entityTypesClass.getField("ARMOR_STAND").get(null);
          armorStandConstructor = armorStandClass.getConstructor(entityTypeClass, levelClass);
          armorStandDisabledSlots = armorStandClass.getField("disabledSlots");
          armorStandSetSmall = armorStandClass.getMethod("setSmall", boolean.class);
@@ -161,7 +162,7 @@ public class EntityUtils {
          armorStandSetPose = armorStandClass.getMethod("setArmorStandPose", armorStandGetPose.getReturnType());
 
          Class<?> creeperClass = Class.forName("net.minecraft.world.entity.monster.Creeper");
-         creeperEntityType = entityTypeClass.getField("CREEPER").get(null);
+         creeperEntityType = entityTypesClass.getField("CREEPER").get(null);
          creeperConstructor = creeperClass.getConstructor(entityTypeClass, levelClass);
 
          Class<?> equipmentSlotClass = Class.forName("net.minecraft.world.entity.EquipmentSlot");
