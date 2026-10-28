@@ -1,0 +1,38 @@
+From 9b22867930dfb5cab1ad53ec2e5a427695a75f93 Mon Sep 17 00:00:00 2001
+From: malken21 <malken.marumasa@gmail.com>
+Date: Thu, 29 Oct 2026 01:31:29 +0900
+Subject: [PATCH] Build only the Paper 26.3 NMS module for dist
+
+---
+ modules/dist/build.gradle | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/modules/dist/build.gradle b/modules/dist/build.gradle
+index 78d55d1b..267d7f29 100644
+--- a/modules/dist/build.gradle
++++ b/modules/dist/build.gradle
+@@ -5,21 +5,6 @@ plugins {
+ }
+ 
+ def nmsModules = [
+-	':shopkeepers-v1_21_R5',
+-	':shopkeepers-v1_21_R5_paper',
+-	':shopkeepers-v1_21_R6',
+-	':shopkeepers-v1_21_R6_paper',
+-	':shopkeepers-v1_21_R7',
+-	':shopkeepers-v1_21_R7_paper',
+-	':shopkeepers-v1_21_R8',
+-	':shopkeepers-v1_21_R8_paper',
+-	':shopkeepers-v1_21_R9',
+-	':shopkeepers-v1_21_R9_paper',
+-	':shopkeepers-v26_1_R1',
+-	':shopkeepers-v26_1_R1_paper',
+-	':shopkeepers-v26_2_R1',
+-	':shopkeepers-v26_2_R1_paper',
+-	':shopkeepers-v26_3_R1',
+ 	':shopkeepers-v26_3_R1_paper'
+ ]
+ 
+-- 
+2.55.0.windows.5
+

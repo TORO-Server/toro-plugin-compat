@@ -1,0 +1,67 @@
+diff --git a/work/vehicles/src/es/pollitoyeye/vehicles/utils/CustomHeadCreator.java b/work/vehicles/patched/CustomHeadCreator.java
+index 4f44ff9..7f8fb92 100644
+--- a/work/vehicles/src/es/pollitoyeye/vehicles/utils/CustomHeadCreator.java
++++ b/work/vehicles/patched/CustomHeadCreator.java
+@@ -1,14 +1,15 @@
+ package es.pollitoyeye.vehicles.utils;
+ 
+-import com.mojang.authlib.GameProfile;
+-import com.mojang.authlib.properties.Property;
+-import com.mojang.authlib.properties.PropertyMap;
++import com.destroystokyo.paper.profile.PlayerProfile;
++import com.destroystokyo.paper.profile.ProfileProperty;
++import org.bukkit.Bukkit;
+ import java.lang.reflect.Field;
+ import java.lang.reflect.Method;
+ import java.util.UUID;
+ import org.bukkit.Material;
+ import org.bukkit.inventory.ItemStack;
+ import org.bukkit.inventory.meta.ItemMeta;
++import org.bukkit.inventory.meta.SkullMeta;
+ 
+ public class CustomHeadCreator {
+    private static Class<?> base64Class;
+@@ -46,14 +47,9 @@ public class CustomHeadCreator {
+    }
+ 
+    public static ItemStack createItemStack(String var0) {
+-      GameProfile var1 = new GameProfile(UUID.randomUUID(), "VehiclesHead");
+-      PropertyMap var2 = var1.getProperties();
+-      if (var2 == null) {
+-         return null;
+-      }
+-
++      PlayerProfile var1 = Bukkit.createProfile(UUID.randomUUID(), "VehiclesHead");
+       byte[] var3 = encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", var0).getBytes());
+-      var2.put("textures", new Property("textures", new String(var3)));
++      var1.setProperty(new ProfileProperty("textures", new String(var3)));
+       if (i == 0) {
+          i = 1;
+ 
+@@ -88,25 +84,8 @@ public class CustomHeadCreator {
+ 
+       ItemStack var20 = new ItemStack(Material.PLAYER_HEAD, 1);
+       ItemMeta var21 = var20.getItemMeta();
+-      Class var23 = null;
+-
+-      try {
+-         var23 = Class.forName("org.bukkit.craftbukkit." + EntityUtils.getVersion() + ".inventory.CraftMetaSkull");
+-      } catch (ClassNotFoundException var18) {
+-         var18.printStackTrace();
+-      }
+-
+-      Method var24;
+-      try {
+-         var24 = var23.getDeclaredMethod("setProfile", GameProfile.class);
+-         var24.setAccessible(true);
+-      } catch (Exception var17) {
+-         var17.printStackTrace();
+-         return null;
+-      }
+-
+       try {
+-         var24.invoke(var21, var1);
++         ((SkullMeta)var21).setPlayerProfile(var1);
+       } catch (Exception var16) {
+          var16.printStackTrace();
+       }

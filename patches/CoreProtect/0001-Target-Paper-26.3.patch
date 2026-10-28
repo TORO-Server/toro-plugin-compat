@@ -1,0 +1,39 @@
+From e6da8b27713960d301dca688bfa88ffef3b2f807 Mon Sep 17 00:00:00 2001
+From: Intelli <contact@intelli.software>
+Date: Wed, 23 Sep 2026 22:37:10 -0600
+Subject: [PATCH] Target Paper 26.3
+
+---
+ pom.xml                                                 | 2 +-
+ src/main/java/net/coreprotect/config/ConfigHandler.java | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index c36d015..fecba73 100755
+--- a/pom.xml
++++ b/pom.xml
+@@ -218,7 +218,7 @@
+     <dependency>
+       <groupId>io.papermc.paper</groupId>
+       <artifactId>paper-api</artifactId>
+-      <version>26.2.build.48-alpha</version> <!-- https://repo.papermc.io/repository/maven-public/ -->
++      <version>26.3.build.38-alpha</version> <!-- https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/ -->
+       <scope>provided</scope>
+     </dependency>
+     <dependency>
+diff --git a/src/main/java/net/coreprotect/config/ConfigHandler.java b/src/main/java/net/coreprotect/config/ConfigHandler.java
+index 12de3d3..b1ee04b 100644
+--- a/src/main/java/net/coreprotect/config/ConfigHandler.java
++++ b/src/main/java/net/coreprotect/config/ConfigHandler.java
+@@ -56,7 +56,7 @@ public class ConfigHandler extends Queue {
+     public static final String JAVA_VERSION = "11.0";
+     public static final String MINECRAFT_VERSION = "1.16.5";
+     public static final String PATCH_VERSION = "24.1";
+-    public static final String LATEST_VERSION = "26.2";
++    public static final String LATEST_VERSION = "26.3";
+     public static String path = "plugins/CoreProtect/";
+     public static String sqlite = "database.db";
+     public static String host = "127.0.0.1";
+-- 
+2.55.0.windows.5
+

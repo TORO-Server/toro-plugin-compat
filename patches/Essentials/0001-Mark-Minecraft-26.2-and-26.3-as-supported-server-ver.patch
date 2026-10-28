@@ -1,0 +1,28 @@
+From e8b8089ae29dc2738569a11dca6ceea9fd2c5545 Mon Sep 17 00:00:00 2001
+From: malken21 <malken.marumasa@gmail.com>
+Date: Thu, 29 Oct 2026 01:51:05 +0900
+Subject: [PATCH] Mark Minecraft 26.2 and 26.3 as supported server versions
+
+---
+ .../main/java/com/earth2me/essentials/utils/VersionUtil.java  | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Essentials/src/main/java/com/earth2me/essentials/utils/VersionUtil.java b/Essentials/src/main/java/com/earth2me/essentials/utils/VersionUtil.java
+index 1698345..299c16e 100644
+--- a/Essentials/src/main/java/com/earth2me/essentials/utils/VersionUtil.java
++++ b/Essentials/src/main/java/com/earth2me/essentials/utils/VersionUtil.java
+@@ -48,8 +48,10 @@ public final class VersionUtil {
+     public static final BukkitVersion v1_21_8_R01 = BukkitVersion.fromString("1.21.8-R0.1-SNAPSHOT");
+     public static final BukkitVersion v1_21_11_R01 = BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT");
+     public static final BukkitVersion v26_1_R01 = BukkitVersion.fromString("26.1.2-R0.1-SNAPSHOT");
++    public static final BukkitVersion v26_2_R01 = BukkitVersion.fromString("26.2-R0.1-SNAPSHOT");
++    public static final BukkitVersion v26_3_R01 = BukkitVersion.fromString("26.3-R0.1-SNAPSHOT");
+ 
+-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_4_R01, v1_20_6_R01, v1_21_11_R01, v26_1_R01);
++    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_4_R01, v1_20_6_R01, v1_21_11_R01, v26_1_R01, v26_2_R01, v26_3_R01);
+ 
+     public static final boolean PRE_FLATTENING = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
+ 
+-- 
+2.55.0.windows.5
+
