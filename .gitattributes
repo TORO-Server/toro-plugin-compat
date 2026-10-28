@@ -1,0 +1,3 @@
+patches/** -text
+vehicles/*.patch -text
+
