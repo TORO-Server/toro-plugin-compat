@@ -64,6 +64,16 @@ public class StorageUtils {
          try {
             ByteArrayInputStream bytes = new ByteArrayInputStream(container.get(key, PersistentDataType.BYTE_ARRAY));
             ObjectInputStream in = new ObjectInputStream(bytes);
+            in.setObjectInputFilter(info -> {
+               Class<?> serialClass = info.serialClass();
+               if (serialClass != null) {
+                  if (serialClass == ArrayList.class || serialClass == byte[].class || (serialClass.isArray() && serialClass.getComponentType() == byte.class)) {
+                     return java.io.ObjectInputFilter.Status.ALLOWED;
+                  }
+                  return java.io.ObjectInputFilter.Status.REJECTED;
+               }
+               return java.io.ObjectInputFilter.Status.UNDECIDED;
+            });
             for (byte[] data : (ArrayList<byte[]>)in.readObject()) {
                items.add(deserializeItemStack(data));
             }
@@ -107,7 +117,12 @@ public class StorageUtils {
       Class<?> nbtIo = Class.forName("net.minecraft.nbt.NbtIo");
       Class<?> accounter = Class.forName("net.minecraft.nbt.NbtAccounter");
       Class<?> compound = Class.forName("net.minecraft.nbt.CompoundTag");
-      Object limit = accounter.getMethod("unlimitedHeap").invoke(null);
+      Object limit;
+      try {
+         limit = accounter.getMethod("create", long.class).invoke(null, 2097152L);
+      } catch (NoSuchMethodException e) {
+         limit = accounter.getMethod("unlimitedHeap").invoke(null);
+      }
       Object tag = nbtIo.getMethod("readCompressed", java.io.InputStream.class, accounter).invoke(null, new ByteArrayInputStream(data), limit);
       if ((Boolean)compound.getMethod("contains", String.class).invoke(tag, "DataVersion")) {
          return data;
