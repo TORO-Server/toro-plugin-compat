@@ -73,13 +73,23 @@ crashed with `ArrayIndexOutOfBoundsException` because the CraftBukkit package no
 `v1_xx_Rx`). Everything NMS related is concentrated in three classes, which are replaced:
 
 * `vehicles/src/.../utils/EntityUtils.java` - same public API, Mojang names, input via `Player#getCurrentInput()`
-* `vehicles/src/.../utils/StorageUtils.java` - `ItemStack#serializeAsBytes` (old NBT blobs are upgraded on read)
+* `vehicles/src/.../utils/StorageUtils.java` - `ItemStack#serializeAsBytes` (old NBT blobs are upgraded on read). The stored `ArrayList<byte[]>` is read through a filter limited to that shape. Data that cannot be read stays in the storage as a named paper item holding the original bytes, and is read again the next time the vehicle is placed.
 * `CustomHeadCreator` - head profile built with Paper's `PlayerProfile` (the rest of the class is untouched)
 
 Steps: decompile with Vineflower (`java -jar vineflower.jar Vehicles-14.4.jar src`), apply the
 `CustomHeadCreator` change (see `vehicles/CustomHeadCreator.patch`), compile the three classes against the
 original jar + Paper 26.3 jars, then `python -I vehicles/build_jar.py` copies every other entry of the
-original jar byte for byte.
+original jar byte for byte. Keep the replaced classes free of nested classes (lambdas are fine) so that the
+patched jar has the same entries as the original.
+
+#### Testing StorageUtils
+`vehicles/test/.../StorageUtilsReadTest.java` checks the stored list format and its limits with the JDK only.
+It is not part of the jar. Compile it against the compiled classes, then run it with the jar build's classpath:
+```
+javac --release 25 -encoding UTF-8 -cp <classes> -d <test> vehicles/test/es/pollitoyeye/vehicles/utils/StorageUtilsReadTest.java
+java -cp <test>;<classes>;<classpath of the jar build> es.pollitoyeye.vehicles.utils.StorageUtilsReadTest
+```
+It exits with 1 if a check fails. What happens to unreadable data in the storage needs a server and is not covered.
 
 The plugin contains anti-piracy code (online licence/ban check against spigotleakprotector.com, jar
 integrity checks that overwrite the jar when they fail). That code was **not modified or bypassed**; the
