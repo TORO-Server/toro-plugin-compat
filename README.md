@@ -2,10 +2,8 @@
 
 Patches and build scripts that keep the TORO-Server (torosaba.net) plugins running on
 **Paper 26.3** while upstream has not released 26.3 compatible versions.
-Private repository - do not publish (contains a derivative of a commercial plugin, see Vehicles).
 
-Deployed jars live on the server in `/home/toroserver/main/plugins/`; the replaced originals are in
-`/home/toroserver/main/plugin_jars_old_20261029/`.
+Deployed jars live in the server's `plugins/` directory; the replaced originals are in a backup directory on the server.
 
 | Plugin | Upstream version | What was done | License |
 |---|---|---|---|
@@ -22,8 +20,7 @@ Deployed jars live on the server in `/home/toroserver/main/plugins/`; the replac
 
 * JDK 25 (Gradle toolchain: `%USERPROFILE%\.gradle\jdks\eclipse_adoptium-25-*`), JDK 26 for `javac`/`jar`
 * Maven (`scoop install maven`), Gradle wrappers of the upstream projects, Python 3 (Vehicles jar assembly)
-* `work/refs` = files copied from the server: `main/versions/26.3/paper-26.3.jar`,
-  `main/cache/mojang_26.3.jar`, `main/libraries/`, `main/plugins/MyPet-3.14.3.jar` (original),
+* `work/refs` = files copied from the server (the Paper server jar, the Mojang jar, `libraries/`, and the original MyPet jar),
   plus `deps/annotations.jar` and `deps/lombok.jar` from Maven Central.
 
 ## Build and deploy
@@ -44,7 +41,7 @@ git checkout -b toro-2.28.1-mc26.3 v2.28.1 && git am ../../patches/Shopkeepers/*
 JAVA_HOME=<jdk25> ./gradlew :shopkeepers-dist:assemble -x test   # -> build/Shopkeepers-2.28.1.jar
 ```
 Deployed as `Shopkeepers-2.28.1-toro26.3.jar`. 2.28 migrates `config.yml` (v11 -> v12); the pre-upgrade
-data was saved to `plugin_jars_old_20261029/Shopkeepers-data-backup-pre2.28.1.tgz`.
+data was saved as a backup archive on the server.
 
 ### MyPet
 ```
@@ -94,7 +91,7 @@ It exits with 1 if a check fails. What happens to unreadable data in the storage
 The plugin contains anti-piracy code (online licence/ban check against spigotleakprotector.com, jar
 integrity checks that overwrite the jar when they fail). That code was **not modified or bypassed**; the
 patched jar keeps all untouched entries (incl. timestamps) as they were. Make sure the licence is valid
-before deploying; keep the original jar (`plugin_jars_old_20261029/Vehicles(14.4).jar`).
+before deploying; keep the original jar.
 
 ## Known remaining WARN/ERROR lines (not plugin faults)
 
