@@ -1,24 +1,22 @@
 # toro-plugin-compat
 
-Patches and build scripts that keep the TORO-Server (torosaba.net) plugins running on
-**Paper 26.3** while upstream has not released 26.3 compatible versions.
+Patches and build scripts that keep the TORO Server plugins running on
+**Paper 26.3** while upstream has not released versions that support it.
 
-Deployed jars live in the server's `plugins/` directory; the replaced originals are in a backup directory on the server.
-
-| Plugin | Upstream version | What was done | License |
-|---|---|---|---|
-| CoreProtect | 24.1 (CE) | cherry-pick upstream commit `68739a2` "Target Paper 26.3" onto tag `v24.1`; build with `-Dproject.branch=master` | Apache-2.0 style (PlayPro) |
-| Shopkeepers | 2.28.1 | upstream tag already ships a `v26_3_R1_paper` NMS module; only `dist` trimmed to that module so the build does not need Spigot BuildTools | GPL-3.0 |
-| MyPet | 3.14.3 | new `nms/v26_3_R1` compat module (copy of `v26_2_R1`, adapted to the Paper 26.3 NMS changes) merged into the official 3.14.3 jar | GPL-3.0 |
-| EssentialsX | 2.22.0 | `VersionUtil`: add 26.2 / 26.3 to the supported versions (removes the "unsupported server version" error) | GPL-3.0 |
-| Vehicles | 14.4 (closed source) | NMS reflection layer rewritten for Mojang mappings, see below | commercial |
+| Plugin | Upstream version | What was done |
+|---|---|---|
+| CoreProtect | 24.1 (CE) | cherry-pick upstream commit `68739a2` "Target Paper 26.3" onto tag `v24.1`; build with `-Dproject.branch=master` |
+| Shopkeepers | 2.28.1 | upstream tag already ships a `v26_3_R1_paper` NMS module; only `dist` trimmed to that module so the build does not need Spigot BuildTools |
+| MyPet | 3.14.3 | new `nms/v26_3_R1` compat module (copy of `v26_2_R1`, adapted to the Paper 26.3 NMS changes) merged into the official 3.14.3 jar |
+| EssentialsX | 2.22.0 | `VersionUtil`: add 26.2 / 26.3 to the supported versions (removes the "unsupported server version" error) |
+| Vehicles | 14.4 (closed source) | NMS reflection layer rewritten for Mojang mappings, see below |
 
 `patches/<Plugin>/*.patch` are `git format-patch` files against the upstream tag named above.
-`work/` (clones, downloaded server jars, build output) and `dist/` (built jars) are not tracked.
+`work/` (clones, downloaded server jars, build output) and `dist/` (built jars) are not tracked. The licenses of the upstream plugins are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Toolchain (Windows)
 
-* JDK 25 (Gradle toolchain: `%USERPROFILE%\.gradle\jdks\eclipse_adoptium-25-*`), JDK 26 for `javac`/`jar`
+* JDK 25 (as a Gradle toolchain), and a newer JDK for `javac`/`jar`
 * Maven (`scoop install maven`), Gradle wrappers of the upstream projects, Python 3 (Vehicles jar assembly)
 * `work/refs` = files copied from the server (the Paper server jar, the Mojang jar, `libraries/`, and the original MyPet jar),
   plus `deps/annotations.jar` and `deps/lombok.jar` from Maven Central.
@@ -32,7 +30,7 @@ git checkout -b toro-24.1-mc26.3 v24.1 && git am ../../patches/CoreProtect/*.pat
 mvn -B -DskipTests -Dproject.branch=master clean package      # -> target/CoreProtect-24.1.jar
 ```
 `project.branch` must be set, otherwise the plugin refuses to start ("branch has not been set").
-Deployed as `CoreProtect-24.1-toro26.3.jar`. First start migrates the database to v24.1 (MySQL/TiDB).
+The first start with this build migrates the database to v24.1 (MySQL-compatible).
 
 ### Shopkeepers
 ```
@@ -40,8 +38,7 @@ git clone https://github.com/Shopkeepers/Shopkeepers work/Shopkeepers && cd work
 git checkout -b toro-2.28.1-mc26.3 v2.28.1 && git am ../../patches/Shopkeepers/*.patch
 JAVA_HOME=<jdk25> ./gradlew :shopkeepers-dist:assemble -x test   # -> build/Shopkeepers-2.28.1.jar
 ```
-Deployed as `Shopkeepers-2.28.1-toro26.3.jar`. 2.28 migrates `config.yml` (v11 -> v12); the pre-upgrade
-data was saved as a backup archive on the server.
+Version 2.28 migrates `config.yml` (v11 -> v12); back up the data before upgrading.
 
 ### MyPet
 ```
@@ -64,7 +61,7 @@ git checkout -b toro-2.22.0-mc26.3 2.22.0 && git am ../../patches/Essentials/*.p
 JAVA_HOME=<jdk25> ./gradlew :EssentialsX:build -x test
 ```
 
-### Vehicles (closed source, version 14.4 by Pollitoyeye)
+### Vehicles (closed source, version 14.4)
 The plugin reflects into Spigot-obfuscated NMS names per Minecraft version (`EntityUtils.initReflection`
 crashed with `ArrayIndexOutOfBoundsException` because the CraftBukkit package no longer contains
 `v1_xx_Rx`). Everything NMS related is concentrated in three classes, which are replaced:
@@ -93,14 +90,6 @@ integrity checks that overwrite the jar when they fail). That code was **not mod
 patched jar keeps all untouched entries (incl. timestamps) as they were. Make sure the licence is valid
 before deploying; keep the original jar.
 
-## Known remaining WARN/ERROR lines (not plugin faults)
+## More
 
-* ProtocolLib: "Version (MC: 26.3.0) has not yet been tested" - works.
-* dynmap: `Invalid rotate error - models_1.txt` - model file of the mod renderer, harmless.
-* LunaChat / Multiverse-Core: handled by the parent session.
-
-## Status (verified from the server startup log only, no in-game test)
-
-All five plugins above enable without errors on Paper 26.3-227. In-game behaviour is untested; Vehicles in particular (driving input, trunks, Mecha/Submarine packets) has only been checked for successful initialisation.
-
-The `cp namecolor`-style 'Could not register alias' warnings already existed before this work and are unrelated.
+- Writing style: [WRITING-STYLE.md](https://github.com/TORO-Server/TORO-Website/blob/main/docs/WRITING-STYLE.md) (Japanese)
